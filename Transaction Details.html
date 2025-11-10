@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transaction Details - TRONSCAN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    :root{ 
+      --brand:#ff073a;           /* TRONSCAN red */
+      --ink:#111214; --ink-2:#2b2d31; --muted:#6b7280; --line:#e5e7eb;
+      --bg:#f6f7fb; --card:#ffffff; --success:#00c087; --chip:#eef2ff;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    *{box-sizing:border-box} html,body{margin:0}
+    body{font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--ink); background:var(--bg)}
+    .container{max-width:1200px; margin:0 auto; padding:0 16px}
+
+    /* header */
+    header{background:#fff; position:sticky; top:0; z-index:10; box-shadow:0 2px 8px rgba(0,0,0,.04)}
+    .bar{display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line)}
+    .logo{display:flex; gap:10px; align-items:center; text-decoration:none}
+    .logo-badge{width:32px; height:32px; border-radius:8px; display:grid; place-items:center}
+    .logo-title{font-weight:800; letter-spacing:.3px}
+    .auth{display:flex; gap:14px; align-items:center}
+    .ghost{border:none; background:transparent; color:var(--ink-2); font-weight:600; cursor:pointer}
+    .primary{border:none; background:var(--ink); color:#fff; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer}
+    .primary:hover{background:var(--brand)}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:10px 0}
+    .nav ul{display:flex; gap:22px; list-style:none; padding:0; margin:0}
+    .nav li{font-size:14px; color:var(--ink-2); cursor:pointer}
+    .nav li.active{color:var(--brand); font-weight:700; position:relative}
+    .nav li.active::after{content:""; position:absolute; left:0; right:0; bottom:-12px; height:3px; background:var(--brand)}
+    .icons{display:flex; gap:10px} .ic{width:36px; height:36px; border-radius:50%; display:grid; place-items:center; cursor:pointer}
+    .ic:hover{background:#f2f3f5}
+
+    /* search */
+    .search-row{display:flex; gap:14px; margin:18px 0}
+    .search{flex:1; background:#fff; border:1px solid var(--line); border-radius:10px; display:flex; overflow:hidden}
+    .search input{flex:1; border:0; outline:0; padding:12px 14px}
+    .search .slash{display:grid; place-items:center; color:#b1b5c3; width:38px; border-left:1px solid var(--line)}
+    .filter{border:0; border-left:1px solid var(--line); padding:0 14px; background:#fff; font-weight:700; cursor:pointer}
+    .banner{background:linear-gradient(90deg,#4a19fa, #9e00ff); color:#fff; border-radius:10px; padding:12px 18px; font-weight:800; display:flex; align-items:center; gap:10px; white-space:nowrap}
+
+    /* cards */
+    .card{background:var(--card); border:1px solid var(--line); border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,.04); padding:22px}
+    h1.title{font-size:18px; margin:0 0 8px}
+    .hash{font-family:var(--mono); background:#f3f4f6; padding:8px 10px; border-radius:8px; display:inline-block; color:#374151; font-size:13px}
+    .status-chip{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-weight:700; margin-top:10px; font-size:12.5px}
+    .ok{background:#e8f8f2; color:var(--success)}
+
+    /* single overview list */
+    .row{display:grid; grid-template-columns:200px 1fr; gap:16px; padding:10px 0; border-bottom:1px solid var(--line); align-items:center}
+    .row:last-child{border-bottom:0}
+    .label{color:var(--muted); font-weight:600; font-size:13.5px}
+    .value{font-weight:700; color:var(--ink-2); text-align:left; font-size:14.5px}
+    .addr{font-family:var(--mono); color:var(--brand); text-decoration:none}
+    .tag{display:inline-block; font-size:12px; padding:3px 8px; border-radius:999px; background:#eef2f7; color:#475569; font-weight:700}
+    .sr-list{display:flex; flex-wrap:wrap; gap:8px}
+
+    /* tabs */
+    .tabs{display:flex; gap:10px; margin-top:18px}
+    .tab{padding:8px 14px; border:1px solid var(--line); background:#fff; border-radius:10px; font-weight:700; cursor:pointer}
+    .tab.active{background:var(--chip); color:#4338ca; border-color:#c7d2fe}
+    .kv{display:grid; grid-template-columns:200px 1fr; gap:16px; padding:8px 0; border-bottom:1px dashed var(--line); align-items:center}
+    .kv:last-child{border-bottom:0}
+    .method{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin-top:12px}
+    .method h3{margin:0 0 8px; font-size:14.5px}
+    .events{display:none} .events.active{display:block}
+    .event-box{background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px}
+    .topic{font-family:var(--mono); font-size:13px; color:#111827}
+    .data-box{background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:8px; font-family:var(--mono)}
+
+    footer{background:#fff; border-top:1px solid var(--line); margin-top:28px}
+    .foot{padding:28px 0; color:#6b7280; font-size:14px; text-align:center}
+    .copy{border:none; background:transparent; color:#6b7280; cursor:pointer; margin-left:6px}
+    .copy:hover{color:var(--brand)}
+  </style>
+</head>
+<body dir="ltr">
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="bar">
+        <a class="logo" href="#">
+          <div class="logo-badge" aria-label="TRON logo">
+            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img">
+              <rect x="0" y="0" width="32" height="32" rx="6" fill="var(--brand)"/>
+              <!-- simplified TRON mark -->
+              <path d="M8 8l10.5 3.2L24 13.5 16.5 24 8 8z" fill="#ffffff" opacity="0.95"/>
+              <path d="M8 8l8.5 10 7.5-4.5-16-5.5z" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="logo-title" style="color:#0f0f0f">TRONSCAN</div>
+        </a>
+        <div class="auth">
+          <button class="ghost">Register</button>
+          <span style="color:#cbd5e1">|</span>
+          <button class="ghost">Log In</button>
+          <button class="primary" id="connectBtn">Connect Wallet</button>
+        </div>
+      </div>
+      <div class="nav container">
+        <ul>
+          <li class="active">Home</li><li>Blockchain</li><li>Tokens</li><li>Data</li><li>Governance</li><li>TRON Ecosystem</li><li>Developers</li><li>More</li><li>SunPump Meme</li><li>SunPerp <span class="tag" style="background:#fee2e2;color:#b91c1c">NEW</span></li>
+        </ul>
+        <div class="icons"><div class="ic"><i class="far fa-bell"></i></div><div class="ic"><i class="far fa-file"></i></div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Search -->
+    <section class="search-row">
+      <div class="search">
+        <input placeholder="Search by Address / Txn Hash / Block / Token / Domain Name" />
+        <div class="slash">/</div>
+        <button class="filter">All Filters <i class="fa fa-chevron-down" style="margin-left:8px"></i></button>
+      </div>
+      <div class="banner"><i class="fa fa-chart-line"></i> TRADE FUTURES ON SunPerp</div>
+    </section>
+
+    <!-- Transaction header card -->
+    <section class="card">
+      <h1 class="title">Transaction Details</h1>
+      <div style="margin-bottom:8px; font-size:14px; color:var(--ink-2)"><a class="addr">TXWPEKS2DziRDKraUKQ56pRaRKhNfJiMt5</a> transferred <b>1.23</b> <span class="tag" style="background:#e8faff;color:#0284c7">USDT</span> to <a class="addr">THDW2bQZiCUiuJxkWWHtmwa9b37JFWnMf4</a></div>
+      <div class="hash">2743f7eeaee4176e20087bf8f8dd12304d5e6bf6d689035aca7161f70ce897d5</div>
+      <div class="status-chip ok"><i class="fa fa-check-circle"></i> Confirmed</div>
+    </section>
+
+    <!-- Single Overview card (like screenshot) -->
+    <section class="card" style="margin-top:12px">
+      <div class="row"><div class="label">Hash:</div><div class="value">2743f7eeaee4176e20087bf8f8dd12304d5e6bf6d689035aca7161f70ce897d5</div></div>
+      <div class="row"><div class="label">Result:</div><div class="value" style="color:var(--success)"><span class="status-chip ok" style="padding:4px 10px"><i class="fa fa-circle-check"></i> SUCCESSFUL</span></div></div>
+      <div class="row"><div class="label">Block &amp; Time:</div><div class="value">77260067 &nbsp; | &nbsp; 4 days ago &nbsp; | &nbsp; 2025-11-06 18:03:21 (Local)</div></div>
+      <div class="row"><div class="label">Status:</div><div class="value"><span class="status-chip ok" style="padding:4px 10px">CONFIRMED</span> <span style="color:var(--muted); font-weight:600">&nbsp; Confirmed by over 200 blocks</span></div></div>
+      <div class="row"><div class="label">Confirmed SRs:</div><div class="value sr-list"><span class="tag">19</span><span class="tag">Google Cloud</span><span class="tag">CryptoGuyInZA</span><span class="tag">CryptoChain</span><span class="tag">Nansen_ai</span></div></div>
+      <div class="row"><div class="label">Resources Consumed &amp; Fee:</div><div class="value"><b>6.7718 TRX</b> &nbsp; <span class="tag">17 Energy</span><br/><span style="color:var(--muted); font-weight:600">Energy Fee Limit: 225 TRX</span></div></div>
+    </section>
+
+    <!-- Tabs section (Overview + Event Logs) -->
+    <section class="card" style="margin-top:14px">
+      <div class="tabs">
+        <button class="tab active" data-tab="overviewTab">Overview</button>
+        <button class="tab" data-tab="eventsTab">Event Logs (1)</button>
+      </div>
+
+      <!-- OVERVIEW -->
+      <div id="overviewTab" class="events active" style="margin-top:14px">
+        <div class="kv"><div class="label">Owner Address</div><div class="value"><a class="addr">TXWPEKS2DziRDKraUKQ56pRaRKhNfJiMt5</a> <button class="copy" data-copy="TXWPEKS2DziRDKraUKQ56pRaRKhNfJiMt5"><i class="far fa-copy"></i></button></div></div>
+        <div class="kv"><div class="label">Contract Address</div><div class="value"><a class="addr">TR7NHqjeKQyTCtGi8qZy4Jp8otSzgjLj6t</a> <span class="tag">USDT Token</span> <button class="copy" data-copy="TR7NHqjeKQyTCtGi8qZy4Jp8otSzgjLj6t"><i class="far fa-copy"></i></button></div></div>
+        <div class="kv"><div class="label">Token Transfer</div><div class="value">From <a class="addr">TXWPEKS2DziRDKraUKQ56pRaRKhNfJiMt5</a> → <a class="addr">THDW2bQZiCUiuJxkWWHtmwa9b37JFWnMf4</a> &nbsp; <b>1.23 USDT</b></div></div>
+        <div class="kv"><div class="label">Amount</div><div class="value">0 TRX</div></div>
+
+        <div class="method">
+          <h3>transfer(address _to, uint256 _value)</h3>
+          <div class="kv"><div class="label">#</div><div class="value" style="font-weight:600">Name &nbsp; &nbsp; Type &nbsp; &nbsp; Data</div></div>
+          <div class="kv"><div class="label">0</div><div class="value"><span class="tag" style="margin-right:6px">_to</span> address &nbsp; <a class="addr">THDW2bQZiCUiuJxkWWHtmwa9b37JFWnMf4</a></div></div>
+          <div class="kv"><div class="label">1</div><div class="value"><span class="tag" style="margin-right:6px">_value</span> uint256 &nbsp; <span class="addr">1230000</span></div></div>
+        </div>
+      </div>
+
+      <!-- EVENT LOGS -->
+      <div id="eventsTab" class="events" style="margin-top:12px">
+        <div class="event-box">
+          <div class="kv"><div class="label">Address</div><div class="value"><span class="tag">USDT Tok…</span> <a class="addr">TR7NHqjeKQyTCtGi8qZy4Jp8otSzgjLj6t</a></div></div>
+          <div class="kv"><div class="label">Event</div><div class="value"><b>Transfer</b>(index_topic_1 address from, index_topic_2 address to, uint256 value)</div></div>
+          <div class="kv"><div class="label">Topics[0]</div><div class="value"><span class="topic">ddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef</span></div></div>
+          <div class="kv"><div class="label">Topics[1]</div><div class="value"><span class="topic">TXWPEKS2DziRDKraUKQ56pRaRKhNfJiMt5</span></div></div>
+          <div class="kv"><div class="label">Topics[2]</div><div class="value"><span class="topic">THDW2bQZiCUiuJxkWWHtmwa9b37JFWnMf4</span></div></div>
+          <div class="kv"><div class="label">Data</div><div class="value"><div class="data-box">value : 1230000</div></div></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">© 2017–2025 tronscan.org — Educational replica UI for demonstration only.</div>
+  </footer>
+
+  <script>
+    // copy helpers
+    document.querySelectorAll('.copy').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const text = btn.getAttribute('data-copy');
+        navigator.clipboard.writeText(text).then(()=>{
+          const prev = btn.innerHTML; btn.innerHTML = '<i class="fa fa-check"></i>'; setTimeout(()=>btn.innerHTML=prev,1400);
+        });
+      });
+    });
+
+    // tabs
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.addEventListener('click',()=>{
+        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+        document.querySelectorAll('.events').forEach(x=>x.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById(t.dataset.tab).classList.add('active');
+      });
+    });
+
+    // wallet button demo
+    document.getElementById('connectBtn').addEventListener('click',()=>{
+      alert('Demo only: wallet connect would open provider in a real dApp.');
+    });
+  </script>
+</body>
+</html>
+
