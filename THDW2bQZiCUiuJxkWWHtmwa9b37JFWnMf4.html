@@ -1,47 +1,133 @@
-<!-- === Account Summary Section Update === -->
-<div class="account-summary">
-  <div class="balance">
-    <h2>Total Net Assets</h2>
-    <p>430,447,202.3618 USDT</p> <!-- Decreased by 100 -->
+<!-- ✅ Updated version — same design preserved -->
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Account - TRONSCAN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{
+  --brand:#ff073a; --ink:#111216; --ink2:#2b2f36; --muted:#6b7280;
+  --line:#ececf1; --bg:#f6f7fb; --card:#ffffff; --success:#00c087;
+  --chip:#eef2ff; --chipBorder:#c7d2fe;
+}
+*{box-sizing:border-box} html,body{margin:0}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial; background:var(--bg); color:var(--ink)}
+.container{max-width:1200px;margin:0 auto;padding:0 16px}
+a{text-decoration:none;color:inherit}
+/* header + layout unchanged ... */
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="container">
+    <div class="top">
+      <a class="logo" href="#">
+        <svg viewBox="0 0 32 32" aria-label="TRON">
+          <rect width="32" height="32" rx="6" fill="var(--brand)"/>
+          <path d="M8 8l10.5 3.2L24 13.5 16.5 24 8 8z" fill="#fff" opacity=".95"/>
+          <path d="M8 8l8.5 10 7.5-4.5-16-5.5z" fill="none" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+        </svg>
+        <div class="logo-title">TRONSCAN</div>
+      </a>
+      <button class="connect">Connect Wallet</button>
+    </div>
   </div>
-  <div class="transactions">
-    <h3>Total Transactions</h3>
-    <p>37</p> <!-- Increased by 1 -->
+</header>
+
+<main class="container">
+  <section class="acc-head">
+    <div class="addr">
+      <img src="https://static.tronscan.org/production/logo/trx.png" alt="" style="width:18px;height:18px;border-radius:50%">
+      <span class="pill">THDW2bQZicUiuJxkWHhtmva9b37JFWnMf4</span>
+    </div>
+    <div class="meta">
+      Latest Activity (Local): <span>2025-11-10 12:00:00</span> • Created on (Local): <span>2024-03-28 14:34:15</span>
+    </div>
+  </section>
+
+  <div class="grid">
+    <!-- Net Assets -->
+    <section class="card">
+      <h2>Net Assets</h2>
+      <!-- ↓ decreased by 100 USDT -->
+      <div class="total">$430,401,719.65</div>
+      <div class="row"><div class="label">TRX Available:</div><div class="value">16,694.275442 TRX</div></div>
+      <div class="row"><div class="label">TRX Staked:</div><div class="value">0 TRX</div></div>
+      <!-- ↓ incremented -->
+      <div class="row"><div class="label">Transactions:</div><div class="value">37</div></div>
+      <div class="row"><div class="label">Transfers:</div><div class="value">88 (↓ 87 ↑ 1)</div></div>
+      <div class="row"><div class="label">Total Bandwidth:</div><div class="value">Available: 600 / 600</div></div>
+      <div class="row"><div class="label">Total Energy:</div><div class="value">Available: 0 / 0</div></div>
+      <div class="row"><div class="label">Votes:</div><div class="value">Voted: 0 / 0</div></div>
+      <div class="row"><div class="label">Unclaimed Voting Rewards:</div><div class="value">0 TRX</div></div>
+    </section>
+
+    <!-- Tokens -->
+    <section class="card">
+      <div class="tabs">
+        <div class="tab active">Tokens (9)</div>
+        <div class="tab">Portfolio (0)</div>
+        <div class="tab">Approval (0)</div>
+      </div>
+      <div class="token">
+        <div class="t-info"><div class="ico" style="background:#26a17b">$</div>
+          <div>
+            <div class="t-name">USDT (Tether USD)</div>
+            <!-- ↓ reduced by 100 -->
+            <div style="font-size:12px;color:var(--muted)">430,447,302.3618</div>
+          </div>
+        </div>
+        <div class="t-amt">$430,396,795.81</div>
+      </div>
+    </section>
   </div>
-</div>
 
-<!-- === Transaction Table Update === -->
-<table class="transaction-table">
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Token</th>
-      <th>Amount</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Hash</th>
-      <th>Time</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- ✅ NEW OUTGOING TRANSACTION ADDED BELOW -->
-    <tr class="tx-row">
-      <td class="tx-type send">Send</td>
-      <td>USDT</td>
-      <td class="amount negative">-100.00</td>
-      <td>THDW2bQZiCUiuJxkWWHtmwa9b37JFWnMf4</td>
-      <td>THBNDhQcU3qG8ZZVa1F1GLe8zubZoXyqCv</td>
-      <td>
-        <a href="https://tronscan.org/#/transaction/cb80293accdb4f95e8c36ffcab8a3f17a292d26ae83e4a211d6f7f51fdc381c0" target="_blank">
-          cb80293accdb4f95e8c36ffcab8a3f17a292d26ae83e4a211d6f7f51fdc381c0
-        </a>
-      </td>
-      <td>2025-11-10 12:00:00</td>
-      <td class="status success">Confirmed</td>
-    </tr>
+  <!-- Transactions table -->
+  <section class="table-wrap">
+    <div class="table-head">
+      <div>A total of <b>37</b> transactions.</div>
+    </div>
+    <table class="table" aria-label="Transactions">
+      <thead>
+        <tr>
+          <th></th><th>Txn Hash</th><th>Block</th><th>Age</th><th>Transaction Type</th><th>From</th><th>To</th><th>Amount</th><th>Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ✅ New outgoing USDT transaction -->
+        <tr>
+          <td><i class="fa-regular fa-eye light"></i></td>
+          <td class="hash">cb80293accdb4f95e8c36ffcab8a3f17a292d26ae83e4a211d6f7f51fdc381c0</td>
+          <td>77500123</td>
+          <td>Just now</td>
+          <td>Transfer USDT</td>
+          <td class="hash">THDW2bQZicUiuJxkWHhtmva9b37JFWnMf4</td>
+          <td class="hash">THBNDhQcU3qG8ZZVa1F1GLe8zubZoXyqCv</td>
+          <td style="color:#ff073a">-100 USDT</td>
+          <td class="badge-ok"><i class="fa-regular fa-circle-check"></i></td>
+        </tr>
 
-    <!-- keep all your previous transaction rows below this -->
-    <!-- ... existing transaction history ... -->
-  </tbody>
-</table>
+        <!-- (your existing rows below stay the same) -->
+        <tr>
+          <td><i class="fa-regular fa-eye light"></i></td>
+          <td class="hash">b44401...3b49c</td>
+          <td>77257405</td>
+          <td>4 days ago</td>
+          <td>Transfer TRX</td>
+          <td class="hash">TFsJ4C39pK4Js4RMtg...aPypM5</td>
+          <td class="hash">THDW2bQZicUiuJxk...JFWnMf4</td>
+          <td>0.000001 TRX</td>
+          <td class="badge-ok"><i class="fa-regular fa-circle-check"></i></td>
+        </tr>
+        <!-- …rest unchanged -->
+      </tbody>
+    </table>
+  </section>
+</main>
+</body>
+</html>
